@@ -54,8 +54,8 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(config.port, () => {
-      console.log(`Server running on port ${config.port}`);
+    app.listen(config.port, '0.0.0.0', () => {
+      console.log(`Server running on 0.0.0.0:${config.port}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
@@ -66,3 +66,4 @@ const startServer = async () => {
 startServer();
 
 export default app;
+
