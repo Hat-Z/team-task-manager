@@ -43,7 +43,7 @@ export const DashboardPage: React.FC = () => {
         {statCards.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.label} className={`${stat.color} text-white`}>
+            <Card key={stat.label} className={`${stat.color}`}>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm opacity-90">{stat.label}</p>
