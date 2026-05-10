@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { connectDB } from './config/database.js';
 import { config } from './config/config.js';
 import authRoutes from './routes/authRoutes.js';
@@ -9,8 +8,6 @@ import projectRoutes from './routes/projectRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 
 const app: Express = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(
