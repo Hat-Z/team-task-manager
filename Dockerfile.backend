@@ -1,5 +1,5 @@
-# Build stage
-FROM node:18-alpine AS builder
+# Backend build stage
+FROM node:18-alpine AS backend-builder
 
 WORKDIR /app
 
@@ -7,11 +7,31 @@ WORKDIR /app
 COPY backend/package*.json ./
 COPY backend/tsconfig.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies, including dev dependencies needed for TypeScript build
+RUN npm install
 
 # Build the application
 COPY backend/src ./src
+RUN npm run build
+
+# Frontend build stage
+FROM node:18-alpine AS frontend-builder
+
+WORKDIR /app
+
+# Copy package and config files
+COPY frontend/package*.json ./
+COPY frontend/tsconfig*.json ./
+COPY frontend/vite.config.ts ./
+COPY frontend/postcss.config.js ./
+COPY frontend/tailwind.config.js ./
+
+# Install dependencies, including Tailwind/PostCSS build tooling
+RUN npm install
+
+# Build the frontend application
+COPY frontend/index.html ./
+COPY frontend/src ./src
 RUN npm run build
 
 # Production stage
@@ -26,10 +46,13 @@ RUN apk add --no-cache dumb-init
 COPY backend/package*.json ./
 
 # Install production dependencies only
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Copy built application from builder
-COPY --from=builder /app/dist ./dist
+COPY --from=backend-builder /app/dist ./dist
+
+# Copy built frontend assets for Express static hosting
+COPY --from=frontend-builder /app/dist ./public
 
 # Create health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \

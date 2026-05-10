@@ -23,6 +23,8 @@ WORKDIR /app
 COPY frontend/package*.json ./frontend/
 COPY frontend/tsconfig*.json ./frontend/
 COPY frontend/vite.config.ts ./frontend/
+COPY frontend/postcss.config.js ./frontend/
+COPY frontend/tailwind.config.js ./frontend/
 
 # Install frontend dependencies
 WORKDIR /app/frontend
