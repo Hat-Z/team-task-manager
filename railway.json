@@ -5,7 +5,6 @@
     "dockerfile": "Dockerfile.backend"
   },
   "deploy": {
-    "startCommand": "node dist/server.js",
     "restartPolicyType": "on_failure",
     "restartPolicyMaxRetries": 5
   }
